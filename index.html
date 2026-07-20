@@ -45,6 +45,21 @@
 
   </main>
 
+<!-- Bloc Suivi d'arrosage (à placer juste après le bloc des boutons) -->
+<div class="card-arrosage" style="clear: both; width: 100%; box-sizing: border-box; background: white; padding: 20px; border-radius: 16px; margin-top: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
+  <h3 style="margin-top: 0; color: #2e7d32; font-size: 1.15rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+    💧 Suivi d'arrosage
+  </h3>
+  
+  <div id="statut-arrosage" style="margin: 12px 0; font-size: 0.95rem; color: #2c3e50;">
+    Chargement du statut...
+  </div>
+
+  <button onclick="enregistrerArrosage()" style="padding: 12px 24px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: transform 0.1s ease;">
+    J'ai arrosé ! 🌿
+  </button>
+</div>
+  
   <!-- POPUPS / MODALES -->
   
   <!-- Pop-up 1 : Soif -->
