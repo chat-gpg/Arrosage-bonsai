@@ -29,31 +29,33 @@ body {
 .header-card {
   background: var(--card-bg);
   border-radius: 20px;
-  padding: 15px; /* Réduit de 20px à 15px pour gagner de la largeur */
+  padding: 15px;
   display: flex;
   align-items: center;
-  gap: 12px; /* Espacement optimal entre image et texte */
+  gap: 12px;
   box-shadow: var(--shadow);
   margin-bottom: 25px;
 }
 
 .header-img {
-  width: 125px; /* Réduit de 200px à 125px */
+  width: 125px;
   height: 125px;
   object-fit: contain;
-  flex-shrink: 0; /* Empêche l'image de se faire écraser */
+  flex-shrink: 0;
 }
 
 .header-text {
-  flex: 1; /* Permet au texte d'occuper tout l'espace restant */
+  flex: 1;
+  text-align: center; /* Centrage du bloc de texte */
 }
 
 .header-text h1 {
   margin: 0;
-  font-size: 1.25rem; /* Ajusté légèrement pour un rendu très propre */
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary-color);
   line-height: 1.3;
+  text-align: center; /* S'assure que le h1 est bien centré */
 }
 
 /* Boutons rectangulaires arrondis */
