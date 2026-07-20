@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonsaï du Bureau 🌿</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="container">
+    
+    <!-- En-tête : Image en haut à gauche + Message au milieu/droite -->
+    <header class="header-card">
+      <img src="images/heureux.png" alt="Bonsaï heureux" class="header-img">
+      <div class="header-text">
+        <h1>Merci beaucoup de t'occuper de moi !</h1>
+      </div>
+    </header>
+
+    <!-- Les 3 rectangles cliquables -->
+    <section class="menu-actions">
+      
+      <button class="action-btn" onclick="openModal('modal-soif')">
+        <span class="btn-text">Comment savoir si j'ai soif ?</span>
+        <span class="btn-arrow">➔</span>
+      </button>
+
+      <button class="action-btn" onclick="openModal('modal-arroser')">
+        <span class="btn-text">Comment m'arroser ?</span>
+        <span class="btn-arrow">➔</span>
+      </button>
+
+      <button class="action-btn" onclick="openModal('modal-humidite')">
+  <span class="btn-text">Et pour l'humidité, comment ça marche ?</span>
+  <span class="btn-arrow">➔</span>
+</button>
+
+      <button class="action-btn" onclick="openModal('modal-tailler')">
+        <span class="btn-text">Comment tailler mes feuilles ?</span>
+        <span class="btn-arrow">➔</span>
+      </button>
+
+    </section>
+
+  </main>
+
+  <!-- POPUPS / MODALES -->
+  
+  <!-- Pop-up 1 : Soif -->
+  <div id="modal-soif" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal('modal-soif')">&times;</button>
+      <img src="images/soif.png" alt="Bonsaï assoiffé" class="modal-img">
+      <h2>Comment savoir si j'ai soif ?</h2>
+      <p>C'est très simple ! il suffit de me peser, si je fais moins de 850g c'est que j'ai besoin d'eau. Utilise la balance juste devant moi.</p>
+    </div>
+  </div>
+
+  <!-- Pop-up 2 : Arroser -->
+  <div id="modal-arroser" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal('modal-arroser')">&times;</button>
+      <img src="images/arroser.png" alt="Bonsaï hydraté" class="modal-img">
+      <h2>Comment m'arroser ?</h2>
+      <p> Pour éviter que la terre ne s'en aille, tu peux la pshitter légèrement avant d'arroser. Verse ensuite de l'eau jusqu'à ce qu'elle coule sous le pot. Attention, pense bien à vider la soucoupe bleue, sinon mes racines vont moisir et c'est la mort assurée ! :o</p>
+    </div>
+  </div>
+
+  <!-- Pop-up 3 : Tailler -->
+  <div id="modal-tailler" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal('modal-tailler')">&times;</button>
+      <img src="images/taille.png" alt="Bonsaï effrayé par les ciseaux" class="modal-img">
+      <h2>Comment tailler mes feuilles ?</h2>
+      <p>Mais ca va pas ou quoi !? Pourquoi tu veux couper mes feuilles ?? T'es un malade laisse moi tranquille !</p>
+    </div>
+  </div>
+
+  <!-- Pop-up 4 : Humidité -->
+<div id="modal-humidite" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal('modal-humidite')">&times;</button>
+    <img src="images/spa.png" alt="Bonsaï heureux" class="modal-img">
+    <h2>Et pour l'humidité, comment ça marche ?</h2>
+    <p>J'adore l'humidité ! N'hésite pas à me pshitter les feuilles si ça te fait plaisir, ça me fait un bien fou. La coupelle sert à augmenter l'humidité autour de moi : si elle est vide, tu peux y remettre un peu d'eau ! 💦</p>
+  </div>
+</div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // Fermer si on clique en dehors du contenu de la fenêtre
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('active');
+      }
+    }
+  </script>
+
+</body>
+</html>
