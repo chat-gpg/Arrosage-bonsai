@@ -87,6 +87,76 @@
   </div>
 </div>
 
+  <!-- Bloc Dernier Arrosage -->
+<div class="card" style="text-align: center; background: white; padding: 20px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
+  <h3 style="margin-top: 0; color: #2e7d32; font-size: 1.15rem;">💧 Suivi d'arrosage</h3>
+  
+  <div id="statut-arrosage" style="margin: 15px 0; font-size: 0.95rem; color: #2c3e50;">
+    Chargement du statut...
+  </div>
+
+  <button onclick="enregistrerArrosage()" style="padding: 12px 20px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer;">
+    J'ai arrosé ! 🌿
+  </button>
+</div>
+
+<!-- Script Firebase connecté à ta base de données -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+  // Ta configuration Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDfE7nd7T5kw1lwz6LxB2keCpfyha4QtzQ",
+    authDomain: "arrosage-bonsai.firebaseapp.com",
+    databaseURL: "https://arrosage-bonsai-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "arrosage-bonsai",
+    storageBucket: "arrosage-bonsai.firebasestorage.app",
+    messagingSenderId: "209886017518",
+    appId: "1:209886017518:web:01437c0b551cb4114e40ff",
+    measurementId: "G-XB8GBM0BRC"
+  };
+
+  // Initialisation de Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Écoute en temps réel des changements d'arrosage
+  const arrosageRef = ref(db, 'dernier_arrosage');
+  onValue(arrosageRef, (snapshot) => {
+    const data = snapshot.val();
+    const affichage = document.getElementById('statut-arrosage');
+    if (data) {
+      affichage.innerHTML = `Dernier arrosage effectué le :<br><strong style="font-size: 1.05rem; color: #2e7d32;">${data.date}</strong>`;
+    } else {
+      affichage.innerHTML = "Aucun arrosage enregistré pour l'instant !";
+    }
+  });
+
+  // Action lors du clic sur le bouton "J'ai arrosé !"
+  window.enregistrerArrosage = function() {
+    const maintenant = new Date();
+    
+    // Format français : "lundi 20 juillet à 14:42"
+    const dateFormatee = maintenant.toLocaleDateString('fr-FR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    set(ref(db, 'dernier_arrosage'), {
+      date: dateFormatee,
+      timestamp: Date.now()
+    }).then(() => {
+      alert("Merci ! L'arrosage a bien été enregistré 💧");
+    }).catch((error) => {
+      alert("Erreur lors de l'enregistrement : " + error.message);
+    });
+  };
+</script>
+
   <script>
     function openModal(id) {
       document.getElementById(id).classList.add('active');
