@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bonsaï du Bureau 🌿</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
@@ -54,6 +55,7 @@
       <button onclick="enregistrerArrosage()" style="padding: 12px 20px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer;">
         J'ai arrosé ! 🌿
       </button>
+      <div id="message-remerciement" style="margin-top: 15px; font-weight: bold; color: #2e7d32; min-height: 24px; font-size: 0.95rem;"></div>
     </div>
 
   </main>
@@ -132,6 +134,37 @@
         affichage.innerHTML = "Aucun arrosage enregistré pour l'instant !";
       }
     });
+    const messagesRigolots = [// --- Option Amour & Compliments ---
+    "Merci à toi, tu es la plus belle de mes fleurs ! 🌸",
+    "Sensationnel ! Mes racines te disent merci ! 🌱",
+    "J'ai de la chance d'avoir un super jardinier comme toi ! 🥰",
+    "Aujourd'hui tu as sauvé une vie, et pas n'importe laquelle : la mienne ! 🦸‍♂️",
+    "C'est donc ça le vrai bonheur ? Merci ! 💚",
+    "Mon héroïsme du jour : être arrosé par une personne formidable ! ✨",
+    "Si j'avais des bras, je te ferais un câlin. 🤗",
+
+    // --- Option Soif & Hydratation ---
+    "Aaaah, ça fait du bien par où ça passe ! 💧😎",
+    "Glouglouglou... La petite goutte du bonheur ! ☕🌿",
+    "Santé ! À la tienne, collègue ! 🥂",
+    "Un shot d'H2O, et c'est reparti pour un tour ! 🚀",
+    "Enfin de l'eau claire ! J'ai failli commander un café. ☕🪴",
+
+    // --- Option Humour de Bureau ---
+    "Une ptite goutte pour moi, un grand geste pour l'ambiance du bureau ! 💼🌿",
+    "Validé par le département des ressources végétales ! ✅",
+    "Si je me mets à pousser trop vite, c'est de ta faute ! 🌿",
+
+    // --- Option Drama & Personnalité ---
+    "Tu mérites une augmentation (ou au moins un deuxième café) ! 🏆",
+    "Allez hop, direction le spa ! 💆‍♂️💦",
+
+    // --- Option Pensées Philosophiques Végétales ---
+    "Arroser un bonsaï, c'est cultiver la patience... et la classe ! 🧘‍♂️",
+    "Je me sens revivre, prêt à faire de la photosynthèse de compétition ! ☀️",
+    "Merci ! Je vais me faire pousser une petite feuille spéciale pour toi. 🍃",
+    "Je suis officiellement la plante la plus gâtée de cet étage ! 👑",
+  ];
 
     // Action lors du clic sur le bouton "J'ai arrosé !"
     window.enregistrerArrosage = function() {
@@ -145,7 +178,31 @@
         hour: '2-digit',
         minute: '2-digit'
       });
+// 1. Lancer les confettis
+      if (typeof confetti === "function") {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.7 }
+        });
+      }
 
+      // 2. Afficher le message aléatoire
+      const messageAleatoire = messagesRigolots[Math.floor(Math.random() * messagesRigolots.length)];
+      const zoneMessage = document.getElementById('message-remerciement');
+      if (zoneMessage) {
+        zoneMessage.innerText = messageAleatoire;
+      }
+
+      // 3. Animation de l'image
+      const headerImg = document.querySelector('.header-img');
+      if (headerImg) {
+        headerImg.style.transition = "transform 0.3s ease";
+        headerImg.style.transform = "scale(1.4) rotate(5deg)";
+        setTimeout(() => {
+          headerImg.style.transform = "scale(1.25)";
+        }, 1000);
+      }
       set(ref(db, 'dernier_arrosage'), {
         date: dateFormatee,
         timestamp: Date.now()
@@ -156,7 +213,6 @@
       const message = encodeURIComponent(`🌿 *Alerte Bonsaï*\n\nLe bonsaï vient d'être arrosé !\n📅 ${dateFormatee}`);
 
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`);
-        alert("Merci ! L'arrosage a bien été enregistré 💧");
       }).catch((error) => {
         alert("Erreur lors de l'enregistrement : " + error.message);
       });
