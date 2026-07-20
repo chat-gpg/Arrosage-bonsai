@@ -106,17 +106,19 @@
     <div class="modal-content" style="max-width: 90%; width: 420px; padding: 30px 20px;">
       <button class="close-btn" onclick="closeModal('modal-succes')">&times;</button>
       
-      <video 
-        src="images/fete.mp4" 
+     <video 
         autoplay 
         loop 
         muted 
         playsinline 
-        class="modal-img" 
-        style="width: 180px; height: 180px; object-fit: contain; border-radius: 12px;">
+        webkit-playsinline
+        style="width: 200px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 10px;">
+        <source src="images/fete.mp4.mp4" type="video/mp4">
+        <source src="images/fete.mp4" type="video/mp4">
       </video>
       
-      <h2 style="font-size: 1.5rem; color: #2e7d32; margin-top: 10px;">Merci beaucoup ! 🌿</h2>
+      <div style="width: 100%; margin-top: 15px;">
+        <h2 style="font-size: 1.4rem; color: #2e7d32; margin: 0 0 10px 0;">Merci beaucoup ! 🌿</h2>
       
       <!-- Zone du message aléatoire rigolo -->
       <p id="succes-message-aleatoire" style="font-size: 1.1rem; line-height: 1.4; color: #2e7d32; font-weight: bold; margin: 15px 0 10px 0;">
