@@ -18,7 +18,7 @@
       </div>
     </header>
 
-    <!-- Les 3 rectangles cliquables -->
+    <!-- Les 4 rectangles cliquables -->
     <section class="menu-actions">
       
       <button class="action-btn" onclick="openModal('modal-soif')">
@@ -32,9 +32,9 @@
       </button>
 
       <button class="action-btn" onclick="openModal('modal-humidite')">
-  <span class="btn-text">Et pour l'humidité, comment ça marche ?</span>
-  <span class="btn-arrow">➔</span>
-</button>
+        <span class="btn-text">Et pour l'humidité, comment ça marche ?</span>
+        <span class="btn-arrow">➔</span>
+      </button>
 
       <button class="action-btn" onclick="openModal('modal-tailler')">
         <span class="btn-text">Comment tailler mes feuilles ?</span>
@@ -43,22 +43,20 @@
 
     </section>
 
+    <!-- Bloc Dernier Arrosage (Place BIEN dans le container) -->
+    <div class="card" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box; text-align: center; background: white; padding: 20px; border-radius: 16px; margin-top: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
+      <h3 style="margin-top: 0; color: #2e7d32; font-size: 1.15rem;">💧 Suivi d'arrosage</h3>
+      
+      <div id="statut-arrosage" style="margin: 15px 0; font-size: 0.95rem; color: #2c3e50;">
+        Chargement du statut...
+      </div>
+
+      <button onclick="enregistrerArrosage()" style="padding: 12px 20px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer;">
+        J'ai arrosé ! 🌿
+      </button>
+    </div>
+
   </main>
-
-<!-- Bloc Suivi d'arrosage (à placer juste après le bloc des boutons) -->
-<div class="card-arrosage" style="clear: both; width: 100%; box-sizing: border-box; background: white; padding: 20px; border-radius: 16px; margin-top: 20px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
-  <h3 style="margin-top: 0; color: #2e7d32; font-size: 1.15rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
-    💧 Suivi d'arrosage
-  </h3>
-  
-  <div id="statut-arrosage" style="margin: 12px 0; font-size: 0.95rem; color: #2c3e50;">
-    Chargement du statut...
-  </div>
-
-  <button onclick="enregistrerArrosage()" style="padding: 12px 24px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: transform 0.1s ease;">
-    J'ai arrosé ! 🌿
-  </button>
-</div>
   
   <!-- POPUPS / MODALES -->
   
@@ -93,84 +91,71 @@
   </div>
 
   <!-- Pop-up 4 : Humidité -->
-<div id="modal-humidite" class="modal">
-  <div class="modal-content">
-    <button class="close-btn" onclick="closeModal('modal-humidite')">&times;</button>
-    <img src="images/spa.png" alt="Bonsaï heureux" class="modal-img">
-    <h2>Et pour l'humidité, comment ça marche ?</h2>
-    <p>J'adore l'humidité ! N'hésite pas à me pshitter les feuilles si ça te fait plaisir, ça me fait un bien fou. La coupelle plastique sert à augmenter l'humidité autour de moi : si elle est vide, tu peux y remettre un peu d'eau ! 💦</p>
-  </div>
-</div>
-
-  <!-- Bloc Dernier Arrosage -->
-<div class="card" style="text-align: center; background: white; padding: 20px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
-  <h3 style="margin-top: 0; color: #2e7d32; font-size: 1.15rem;">💧 Suivi d'arrosage</h3>
-  
-  <div id="statut-arrosage" style="margin: 15px 0; font-size: 0.95rem; color: #2c3e50;">
-    Chargement du statut...
+  <div id="modal-humidite" class="modal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal('modal-humidite')">&times;</button>
+      <img src="images/spa.png" alt="Bonsaï heureux" class="modal-img">
+      <h2>Et pour l'humidité, comment ça marche ?</h2>
+      <p>J'adore l'humidité ! N'hésite pas à me pshitter les feuilles si ça te fait plaisir, ça me fait un bien fou. La coupelle plastique sert à augmenter l'humidité autour de moi : si elle est vide, tu peux y remettre un peu d'eau ! 💦</p>
+    </div>
   </div>
 
-  <button onclick="enregistrerArrosage()" style="padding: 12px 20px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer;">
-    J'ai arrosé ! 🌿
-  </button>
-</div>
+  <!-- Script Firebase connecté à ta base de données -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-<!-- Script Firebase connecté à ta base de données -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    // Ta configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDfE7nd7T5kw1lwz6LxB2keCpfyha4QtzQ",
+      authDomain: "arrosage-bonsai.firebaseapp.com",
+      databaseURL: "https://arrosage-bonsai-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "arrosage-bonsai",
+      storageBucket: "arrosage-bonsai.firebasestorage.app",
+      messagingSenderId: "209886017518",
+      appId: "1:209886017518:web:01437c0b551cb4114e40ff",
+      measurementId: "G-XB8GBM0BRC"
+    };
 
-  // Ta configuration Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyDfE7nd7T5kw1lwz6LxB2keCpfyha4QtzQ",
-    authDomain: "arrosage-bonsai.firebaseapp.com",
-    databaseURL: "https://arrosage-bonsai-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "arrosage-bonsai",
-    storageBucket: "arrosage-bonsai.firebasestorage.app",
-    messagingSenderId: "209886017518",
-    appId: "1:209886017518:web:01437c0b551cb4114e40ff",
-    measurementId: "G-XB8GBM0BRC"
-  };
+    // Initialisation de Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-  // Initialisation de Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  // Écoute en temps réel des changements d'arrosage
-  const arrosageRef = ref(db, 'dernier_arrosage');
-  onValue(arrosageRef, (snapshot) => {
-    const data = snapshot.val();
-    const affichage = document.getElementById('statut-arrosage');
-    if (data) {
-      affichage.innerHTML = `Dernier arrosage effectué le :<br><strong style="font-size: 1.05rem; color: #2e7d32;">${data.date}</strong>`;
-    } else {
-      affichage.innerHTML = "Aucun arrosage enregistré pour l'instant !";
-    }
-  });
-
-  // Action lors du clic sur le bouton "J'ai arrosé !"
-  window.enregistrerArrosage = function() {
-    const maintenant = new Date();
-    
-    // Format français : "lundi 20 juillet à 14:42"
-    const dateFormatee = maintenant.toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      hour: '2-digit',
-      minute: '2-digit'
+    // Écoute en temps réel des changements d'arrosage
+    const arrosageRef = ref(db, 'dernier_arrosage');
+    onValue(arrosageRef, (snapshot) => {
+      const data = snapshot.val();
+      const affichage = document.getElementById('statut-arrosage');
+      if (data) {
+        affichage.innerHTML = `Dernier arrosage effectué le :<br><strong style="font-size: 1.05rem; color: #2e7d32;">${data.date}</strong>`;
+      } else {
+        affichage.innerHTML = "Aucun arrosage enregistré pour l'instant !";
+      }
     });
 
-    set(ref(db, 'dernier_arrosage'), {
-      date: dateFormatee,
-      timestamp: Date.now()
-    }).then(() => {
-      alert("Merci ! L'arrosage a bien été enregistré 💧");
-    }).catch((error) => {
-      alert("Erreur lors de l'enregistrement : " + error.message);
-    });
-  };
-</script>
+    // Action lors du clic sur le bouton "J'ai arrosé !"
+    window.enregistrerArrosage = function() {
+      const maintenant = new Date();
+      
+      // Format français : "lundi 20 juillet à 14:42"
+      const dateFormatee = maintenant.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      set(ref(db, 'dernier_arrosage'), {
+        date: dateFormatee,
+        timestamp: Date.now()
+      }).then(() => {
+        alert("Merci ! L'arrosage a bien été enregistré 💧");
+      }).catch((error) => {
+        alert("Erreur lors de l'enregistrement : " + error.message);
+      });
+    };
+  </script>
 
   <script>
     function openModal(id) {
