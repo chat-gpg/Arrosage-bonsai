@@ -150,6 +150,14 @@
         date: dateFormatee,
         timestamp: Date.now()
       }).then(() => {
+        // 2. Envoi de la notification Telegram
+      const botToken = "TON_BOT_TOKEN_ICI"; // 👈 Colle ton token
+      const chatId = "TON_CHAT_ID_ICI";     // 👈 Colle ton ID
+      const message = encodeURIComponent(`🌿 **Alerte Bonsaï**\n\nLe bonsaï vient d'être arrosé !\n📅 ${dateFormatee}`);
+
+      if (botToken !== "TON_BOT_TOKEN_ICI") {
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`);
+      }
         alert("Merci ! L'arrosage a bien été enregistré 💧");
       }).catch((error) => {
         alert("Erreur lors de l'enregistrement : " + error.message);
