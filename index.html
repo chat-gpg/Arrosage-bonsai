@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bonsaï du Bureau 🌿</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
@@ -44,7 +44,7 @@
 
     </section>
 
-    <!-- Bloc Dernier Arrosage (Place BIEN dans le container) -->
+    <!-- Bloc Dernier Arrosage -->
     <div class="card" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box; text-align: center; background: white; padding: 20px; border-radius: 16px; margin-top: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);">
       <h3 style="margin-top: 0; color: #2e7d32; font-size: 1.15rem;">💧 Suivi d'arrosage</h3>
       
@@ -55,7 +55,6 @@
       <button onclick="enregistrerArrosage()" style="padding: 12px 20px; border-radius: 12px; border: none; background: #2e7d32; color: white; font-size: 0.95rem; font-weight: bold; cursor: pointer;">
         J'ai arrosé ! 🌿
       </button>
-      <div id="message-remerciement" style="margin-top: 15px; font-weight: bold; color: #2e7d32; min-height: 24px; font-size: 0.95rem;"></div>
     </div>
 
   </main>
@@ -102,12 +101,29 @@
     </div>
   </div>
 
-  <!-- Script Firebase connecté à ta base de données -->
+  <!-- Pop-up 5 : Succès Arrosage Grand Format -->
+  <div id="modal-succes" class="modal">
+    <div class="modal-content" style="max-width: 90%; width: 420px; padding: 30px 20px;">
+      <button class="close-btn" onclick="closeModal('modal-succes')">&times;</button>
+      
+      <img src="images/fete.gif" alt="Bonsaï fait la fête" class="modal-img" style="width: 180px; height: 180px;">
+      
+      <h2 style="font-size: 1.5rem; color: #2e7d32; margin-top: 10px;">Merci beaucoup ! 🌿</h2>
+      
+      <!-- Zone du message aléatoire rigolo -->
+      <p id="succes-message-aleatoire" style="font-size: 1.1rem; line-height: 1.4; color: #2e7d32; font-weight: bold; margin: 15px 0 10px 0;">
+      </p>
+
+      <p id="succes-date" style="font-size: 0.85rem; color: #7f8c8d; margin: 0;">
+      </p>
+    </div>
+  </div>
+
+  <!-- Script Firebase & Application -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-    // Ta configuration Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyDfE7nd7T5kw1lwz6LxB2keCpfyha4QtzQ",
       authDomain: "arrosage-bonsai.firebaseapp.com",
@@ -119,11 +135,10 @@
       measurementId: "G-XB8GBM0BRC"
     };
 
-    // Initialisation de Firebase
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Écoute en temps réel des changements d'arrosage
+    // Écoute du dernier arrosage
     const arrosageRef = ref(db, 'dernier_arrosage');
     onValue(arrosageRef, (snapshot) => {
       const data = snapshot.val();
@@ -134,43 +149,36 @@
         affichage.innerHTML = "Aucun arrosage enregistré pour l'instant !";
       }
     });
-    const messagesRigolots = [// --- Option Amour & Compliments ---
-    "Merci à toi, tu es la plus belle de mes fleurs ! 🌸",
-    "Sensationnel ! Mes racines te disent merci ! 🌱",
-    "J'ai de la chance d'avoir un super jardinier comme toi ! 🥰",
-    "Aujourd'hui tu as sauvé une vie, et pas n'importe laquelle : la mienne ! 🦸‍♂️",
-    "C'est donc ça le vrai bonheur ? Merci ! 💚",
-    "Mon héroïsme du jour : être arrosé par une personne formidable ! ✨",
-    "Si j'avais des bras, je te ferais un câlin. 🤗",
 
-    // --- Option Soif & Hydratation ---
-    "Aaaah, ça fait du bien par où ça passe ! 💧😎",
-    "Glouglouglou... La petite goutte du bonheur ! ☕🌿",
-    "Santé ! À la tienne, collègue ! 🥂",
-    "Un shot d'H2O, et c'est reparti pour un tour ! 🚀",
-    "Enfin de l'eau claire ! J'ai failli commander un café. ☕🪴",
-
-    // --- Option Humour de Bureau ---
-    "Une ptite goutte pour moi, un grand geste pour l'ambiance du bureau ! 💼🌿",
-    "Validé par le département des ressources végétales ! ✅",
-    "Si je me mets à pousser trop vite, c'est de ta faute ! 🌿",
-
-    // --- Option Drama & Personnalité ---
-    "Tu mérites une augmentation (ou au moins un deuxième café) ! 🏆",
-    "Allez hop, direction le spa ! 💆‍♂️💦",
-
-    // --- Option Pensées Philosophiques Végétales ---
-    "Arroser un bonsaï, c'est cultiver la patience... et la classe ! 🧘‍♂️",
-    "Je me sens revivre, prêt à faire de la photosynthèse de compétition ! ☀️",
-    "Merci ! Je vais me faire pousser une petite feuille spéciale pour toi. 🍃",
-    "Je suis officiellement la plante la plus gâtée de cet étage ! 👑",
-  ];
+    // Liste des messages aléatoires
+    const messagesRigolots = [
+      "Merci à toi, tu es la plus belle de mes fleurs ! 🌸",
+      "Sensationnel ! Mes racines te disent merci ! 🌱",
+      "J'ai de la chance d'avoir un super jardinier comme toi ! 🥰",
+      "Aujourd'hui tu as sauvé une vie, et pas n'importe laquelle : la mienne ! 🦸‍♂️",
+      "C'est donc ça le vrai bonheur ? Merci ! 💚",
+      "Mon héroïsme du jour : être arrosé par une personne formidable ! ✨",
+      "Si j'avais des bras, je te ferais un câlin. 🤗",
+      "Aaaah, ça fait du bien par où ça passe ! 💧😎",
+      "Glouglouglou... La petite goutte du bonheur ! ☕🌿",
+      "Santé ! À la tienne, collègue ! 🥂",
+      "Un shot d'H2O, et c'est reparti pour un tour ! 🚀",
+      "Enfin de l'eau claire ! J'ai failli commander un café. ☕🪴",
+      "Une ptite goutte pour moi, un grand geste pour l'ambiance du bureau ! 💼🌿",
+      "Validé par le département des ressources végétales ! ✅",
+      "Si je me mets à pousser trop vite, c'est de ta faute ! 🌿",
+      "Tu mérites une augmentation (ou au moins un deuxième café) ! 🏆",
+      "Allez hop, direction le spa ! 💆‍♂️💦",
+      "Arroser un bonsaï, c'est cultiver la patience... et la classe ! 🧘‍♂️",
+      "Je me sens revivre, prêt à faire de la photosynthèse de compétition ! ☀️",
+      "Merci ! Je vais me faire pousser une petite feuille spéciale pour toi. 🍃",
+      "Je suis officiellement la plante la plus gâtée de cet étage ! 👑"
+    ];
 
     // Action lors du clic sur le bouton "J'ai arrosé !"
     window.enregistrerArrosage = function() {
       const maintenant = new Date();
       
-      // Format français : "lundi 20 juillet à 14:42"
       const dateFormatee = maintenant.toLocaleDateString('fr-FR', {
         weekday: 'long',
         day: 'numeric',
@@ -178,47 +186,65 @@
         hour: '2-digit',
         minute: '2-digit'
       });
-// 1. Lancer les confettis
-      if (typeof confetti === "function") {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.7 }
-        });
-      }
 
-      // 2. Afficher le message aléatoire
-      const messageAleatoire = messagesRigolots[Math.floor(Math.random() * messagesRigolots.length)];
-      const zoneMessage = document.getElementById('message-remerciement');
-      if (zoneMessage) {
-        zoneMessage.innerText = messageAleatoire;
-      }
-
-      // 3. Animation de l'image
-      const headerImg = document.querySelector('.header-img');
-      if (headerImg) {
-        headerImg.style.transition = "transform 0.3s ease";
-        headerImg.style.transform = "scale(1.4) rotate(5deg)";
-        setTimeout(() => {
-          headerImg.style.transform = "scale(1.25)";
-        }, 1000);
-      }
+      // 1. Sauvegarde dans Firebase
       set(ref(db, 'dernier_arrosage'), {
         date: dateFormatee,
         timestamp: Date.now()
       }).then(() => {
-       // 2. Envoi de la notification Telegram
-      const botToken = "8715518969:AAG6bEO8RgCImpNiQ_gsaRlBgWcFSW2w6FQ";
-      const chatId = "8645890914";
-      const message = encodeURIComponent(`🌿 *Alerte Bonsaï*\n\nLe bonsaï vient d'être arrosé !\n📅 ${dateFormatee}`);
+        
+        // 2. Envoi Telegram
+        const botToken = "8715518969:AAG6bEO8RgCImpNiQ_gsaRlBgWcFSW2w6FQ";
+        const chatId = "8645890914";
+        const message = encodeURIComponent(`🌿 *Alerte Bonsaï*\n\nLe bonsaï vient d'être arrosé !\n📅 ${dateFormatee}`);
 
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`);
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=Markdown`);
+
+        // 3. Préparer le Pop-up avec un message aléatoire
+        const msgAleatoire = messagesRigolots[Math.floor(Math.random() * messagesRigolots.length)];
+        document.getElementById('succes-message-aleatoire').innerText = msgAleatoire;
+        document.getElementById('succes-date').innerText = `Enregistré le ${dateFormatee}`;
+
+        // 4. Ouvrir la modale grand format
+        openModal('modal-succes');
+
+        // 5. Lancer les confettis
+        lancerConfettis();
+
       }).catch((error) => {
         alert("Erreur lors de l'enregistrement : " + error.message);
       });
     };
+
+    // Animation de confettis (durée : 3 secondes)
+    function lancerConfettis() {
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 4,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#2e7d32', '#81c784', '#ffffff']
+        });
+        confetti({
+          particleCount: 4,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#2e7d32', '#81c784', '#ffffff']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
   </script>
 
+  <!-- Fonctions d'ouverture/fermeture des Modales -->
   <script>
     function openModal(id) {
       document.getElementById(id).classList.add('active');
@@ -228,7 +254,6 @@
       document.getElementById(id).classList.remove('active');
     }
 
-    // Fermer si on clique en dehors du contenu de la fenêtre
     window.onclick = function(event) {
       if (event.target.classList.contains('modal')) {
         event.target.classList.remove('active');
